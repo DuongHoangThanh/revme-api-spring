@@ -103,7 +103,19 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+		<dependency>
+			<groupId>com.bezkoder</groupId>
+			<artifactId>spring-boot-login-example</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20240303</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -74,6 +74,12 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<Assessment> assessments;
 	
+	@OneToMany(mappedBy = "user")
+	private List<Goal> goals;
+	
+	@OneToMany(mappedBy = "user")
+	private List<Plan> plans;
+	
 	public User() {}
 
 	public User(Long id) {
