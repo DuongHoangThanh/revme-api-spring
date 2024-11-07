@@ -62,13 +62,8 @@ public class PlanService {
     @Value("${openai.api.key}")
     private String openaiApiKey;
 
-    /**
-     * Hàm gửi thông tin assessment, danh sách exercise và food lên API ChatGPT
-     * và nhận về kế hoạch tập luyện và ăn uống.
-     */
     public JSONObject generatePlan(Assessment assessment, List<Exercise> exercises, List<Food> foods) {
     	
-    	// Lấy thông tin Id và Name của Exercise và Food
     	List<Map<String, Object>> exerciseList = exercises.stream()
     	        .map(ex -> {
     	            Map<String, Object> map = new HashMap<>();
@@ -87,7 +82,6 @@ public class PlanService {
     	        })
     	        .collect(Collectors.toList());
 
-        // Tạo prompt để gửi đến API ChatGPT
         String prompt = "- Dựa trên thông tin của người dùng sau, hãy tạo một lộ trình tập luyện và ăn uống trong 7 ngày dưới dạng JSON. \n"
         		+"- Assessment: " + assessment + "\n" +
                 "- Danh sách bài tập:\n" + exerciseList.toString() + "\n" +
@@ -115,7 +109,6 @@ public class PlanService {
         System.out.println(prompt);
         System.out.println("Successful!");
 
-        // Cấu hình header và body cho request
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("Authorization", "Bearer " + openaiApiKey);
@@ -128,37 +121,31 @@ public class PlanService {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
         // Gọi API ChatGPT và nhận JSON response
+        
         ResponseEntity<String> response = restTemplate.postForEntity("https://api.openai.com/v1/completions", entity, String.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
-            // Chuyển đổi dữ liệu nhận về thành JSONObject
             return new JSONObject(response.getBody());
         } else {
             throw new RuntimeException("Error occurred while calling ChatGPT API: " + response.getStatusCode());
         }
     }
 
-    /**
-     * Hàm nhận dữ liệu JSON từ API ChatGPT và lưu thông tin vào cơ sở dữ liệu.
-     */
+
     public void saveGeneratedPlan(JSONObject generatedData, User user) {
-        // Lấy goal_name từ dữ liệu nhận về
+    	
         String goalName = generatedData.getString("goal_name");
 
-        // Tạo một Goal mới và lưu vào database
         Goal newGoal = new Goal();
         newGoal.setGoalName(goalName);
         newGoal.setUser(user);
         goalRepository.save(newGoal);
 
-        // Lấy danh sách các ngày từ JSON response
         JSONArray days = generatedData.getJSONArray("days");
 
-        // Lưu các kế hoạch từng ngày vào bảng Plan
         for (int i = 0; i < days.length(); i++) {
             JSONObject day = days.getJSONObject(i);
 
-            // Tạo Plan mới
             Plan plan = new Plan();
             plan.setNameDay(day.getString("name_day"));
             plan.setDescription(day.getString("description"));
@@ -169,7 +156,6 @@ public class PlanService {
             plan.setUser(user);
             planRepository.save(plan);
 
-            // Lưu thông tin WorkoutPlan
             JSONArray workouts = day.getJSONArray("workouts");
             for (int j = 0; j < workouts.length(); j++) {
                 JSONObject workout = workouts.getJSONObject(j);
@@ -196,7 +182,6 @@ public class PlanService {
                 workoutPlanRepository.save(workoutPlan);
             }
 
-            // Lưu thông tin MealPlan
             JSONArray meals = day.getJSONArray("meals");
             for (int k = 0; k < meals.length(); k++) {
                 JSONObject meal = meals.getJSONObject(k);
