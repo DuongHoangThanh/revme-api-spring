@@ -94,8 +94,9 @@ public class Assessment {
 	@UpdateTimestamp
 	@Column(name = "updated_at", nullable = false)
 	private Timestamp updatedAt;
-	
-	public Assessment() {}
+
+	public Assessment() {
+	}
 
 	public Assessment(User user, Gender gender, @NotNull int age, Double height, Double weight,
 			ActivityLevel activityLevel, String healthConditions, String currentDiet, String dietaryPreferences,
@@ -262,7 +263,15 @@ public class Assessment {
 	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "gender: " + this.gender + "; age: " + this.age + "; height: " + this.height + "; weight: " + this.weight
+				+ "; activity_level: " + this.activityLevel + "; health_conditions: " + this.healthConditions
+				+ "; current_diet: " + this.currentDiet + ";\n dietary_preferences: " + this.dietaryPreferences
+				+ "; favorite_foods: " + this.favoriteFoods + "; workout_experience: " + this.workoutExperience
+				+ "; preferred_exercise: " + this.preferredExercise + "; daily_workout_time: " + this.dailyWorkoutTime
+				+ "; sleep_quality: " + this.sleepQuality + "; stress_level: " + this.stressLevel;
+	}
+
 }
-
-

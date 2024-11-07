@@ -88,11 +88,32 @@ public class PlanService {
     	        .collect(Collectors.toList());
 
         // Tạo prompt để gửi đến API ChatGPT
-        String prompt = "Dựa trên thông tin sau, hãy tạo một lộ trình tập luyện và ăn uống trong 7 ngày dưới dạng JSON. "
-                + "Goal: " + assessment + "\n"
-                + "Danh sách bài tập: " + exerciseList.toString() + "\n"
-                + "Danh sách thực phẩm: " + foodList.toString() + "\n"
-                + "Trả về kết quả JSON với cấu trúc đã cho.";
+        String prompt = "- Dựa trên thông tin của người dùng sau, hãy tạo một lộ trình tập luyện và ăn uống trong 7 ngày dưới dạng JSON. \n"
+        		+"- Assessment: " + assessment + "\n" +
+                "- Danh sách bài tập:\n" + exerciseList.toString() + "\n" +
+                "- Danh sách thực phẩm:\n" + foodList.toString() + "\n" +
+                "- Chỉ dựa vào danh sách bài tập và thực phẩm trên trả về kết quả dưới dạng JSON với cấu trúc như sau:\n" +
+                "{\n" +
+                " \"goal_name\": \"Giảm cân\",\n"+
+                "  \"days\": [\n" +
+                "    {\n" +
+                "      \"name_day\": \"Ngày 1\",\n" +
+                "      \"description\": \"Mô tả ngắn về kế hoạch trong ngày\",\n" +
+                "      \"calories_burned_per_day\": 500,\n" +
+                "      \"calories_intake_per_day\": 2000,\n" +
+                "      \"water_intake_target\": 2.0,\n" +
+                "      \"workouts\": [\n" +
+                "        {\"exercise_id\": 1, \"note\": \"Ghi chú bài tập\", \"status\": 0},…\n" +
+                "      ],\n" +
+                "      \"meals\": [\n" +
+                "        {\"food_id\": 1, \"note\": \"Ghi chú bữa ăn\", \"status\": 0},…\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  ]\n" +
+                "}\n";
+        
+        System.out.println(prompt);
+        System.out.println("Successful!");
 
         // Cấu hình header và body cho request
         HttpHeaders headers = new HttpHeaders();
