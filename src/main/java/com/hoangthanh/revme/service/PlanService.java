@@ -1,5 +1,6 @@
 package com.hoangthanh.revme.service;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -309,6 +310,7 @@ public class PlanService {
 	public void saveGeneratedPlan(JSONObject generatedData, User user) {
 
 		if (generatedData.has("content")) {
+			LocalDate currentDate = LocalDate.now();
 			System.out.println("======= Convert data from generate ========");
 //			JSONObject content = generatedData.getJSONObject("content");
 			JSONObject content = null;
@@ -341,6 +343,8 @@ public class PlanService {
 
 			JSONArray days = content.getJSONArray("days");
 //			JSONArray days = generatedData.getJSONArray("days");
+			
+			
 
 			for (int i = 0; i < days.length(); i++) {
 				JSONObject day = days.getJSONObject(i);
@@ -353,6 +357,10 @@ public class PlanService {
 				plan.setWaterIntakeTarget(day.getDouble("water_intake_target"));
 				plan.setGoal(newGoal);
 				plan.setUser(user);
+				
+				LocalDate specificDate = currentDate.plusDays(i); // Ngày hiện tại + i ngày
+			    plan.setSpecificDate(specificDate);
+				
 				planRepository.save(plan);
 
 				JSONArray workouts = day.getJSONArray("workouts");
