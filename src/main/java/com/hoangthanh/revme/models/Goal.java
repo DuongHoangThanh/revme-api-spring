@@ -28,7 +28,7 @@ public class Goal {
     @Column(name = "estimated_duration")
     private Integer estimatedDuration;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private Timestamp createdAt;
 
     @Column(name = "updated_at")

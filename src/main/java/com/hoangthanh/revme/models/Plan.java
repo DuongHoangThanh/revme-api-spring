@@ -1,6 +1,7 @@
 package com.hoangthanh.revme.models;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -22,6 +23,9 @@ public class Plan {
 
     @Column(name = "name_day")
     private String nameDay;
+    
+    @Column(name = "specific_date")
+    private LocalDate specificDate;
 
     @Column(name = "description")
     private String description;
@@ -35,7 +39,7 @@ public class Plan {
     @Column(name = "water_intake_target")
     private Double waterIntakeTarget;
 
-    @Column(name = "created_at", updatable = false)
+    @Column(name = "created_at", updatable = false, nullable = false)
     private Timestamp createdAt;
 
     @Column(name = "updated_at")
@@ -139,7 +143,12 @@ public class Plan {
 	public void setUser(User user) {
 		this.user = user;
 	}
-    
-    
-    
+
+	public LocalDate getSpecificDate() {
+		return specificDate;
+	}
+
+	public void setSpecificDate(LocalDate specificDate) {
+		this.specificDate = specificDate;
+	}
 }
