@@ -25,12 +25,16 @@ import com.hoangthanh.revme.repository.FoodRepository;
 import com.hoangthanh.revme.repository.UserRepository;
 import com.hoangthanh.revme.request.AssessmentRequest;
 import com.hoangthanh.revme.security.services.UserDetailsImpl;
+import com.hoangthanh.revme.service.AssessmentService;
 import com.hoangthanh.revme.service.PlanService;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/plan")
 public class PlanController {
+	
+	@Autowired
+	private AssessmentService assessmentService;
 
 	@Autowired
 	private PlanService planService;
@@ -75,14 +79,16 @@ public class PlanController {
         assessment.setDailyWorkoutTime(assessmentRequest.getDailyWorkoutTime());
         assessment.setSleepQuality(assessmentRequest.getSleepQuality());
         assessment.setStressLevel(assessmentRequest.getStressLevel());
+        assessmentService.saveAssessment(assessment);
 		
 		List<Exercise> exercises = exerciseRepository.findAll();
 		List<Food> foods = foodRepository.findAll();
 
 		try {
 			JSONObject generatedData = planService.generatePlan(assessment, exercises, foods);
-
+			
 			planService.saveGeneratedPlan(generatedData, user);
+//			planService.saveGeneratedPlan(jsonObject, user);
 
 			return ResponseEntity.ok("Plan generated and saved successfully.");
 		} catch (Exception e) {
