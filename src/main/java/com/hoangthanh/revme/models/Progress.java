@@ -32,6 +32,18 @@ public class Progress {
 
     @Column(name = "total_water_intake")
     private Double totalWaterIntake;
+    
+    @Column(name = "workout_progress")
+    private Double workoutProgress;
+    
+    @Column(name = "meal_progress")
+    private Double mealProgress;
+
+    @Column(name = "calories_burned_progress")
+    private Double caloriesBurnedProgress;
+
+    @Column(name = "calories_intake_progress")
+    private Double caloriesIntakeProgress;
 
     @Column(name = "notes")
     private String notes;
@@ -47,6 +59,8 @@ public class Progress {
     private Timestamp updatedAt;
 
     public Progress() {}
+    
+    public Progress(Plan plan, int completedWorkouts) {}
 
 	public Long getId() {
 		return id;
@@ -127,6 +141,36 @@ public class Progress {
 	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-    
-    
+
+	public Double getWorkoutProgress() {
+		return workoutProgress;
+	}
+
+	public void setWorkoutProgress(Double workoutProgress) {
+		this.workoutProgress = workoutProgress;
+	}
+
+	public Double getMealProgress() {
+		return mealProgress;
+	}
+
+	public void setMealProgress(Double mealProgress) {
+		this.mealProgress = mealProgress;
+	}
+
+	public Double getCaloriesBurnedProgress() {
+		return caloriesBurnedProgress;
+	}
+
+	public void setCaloriesBurnedProgress(Double caloriesBurnedProgress) {
+		this.caloriesBurnedProgress = caloriesBurnedProgress;
+	}
+
+	public Double getCaloriesIntakeProgress() {
+		return caloriesIntakeProgress;
+	}
+
+	public void setCaloriesIntakeProgress(Double caloriesIntakeProgress) {
+		this.caloriesIntakeProgress = caloriesIntakeProgress;
+	}
 }

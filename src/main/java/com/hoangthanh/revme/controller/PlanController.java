@@ -1,15 +1,20 @@
 package com.hoangthanh.revme.controller;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.hoangthanh.revme.models.Assessment;
 import com.hoangthanh.revme.models.Exercise;
 import com.hoangthanh.revme.models.Food;
+import com.hoangthanh.revme.models.Plan;
 import com.hoangthanh.revme.models.User;
+import com.hoangthanh.revme.models.WorkoutPlan;
 import com.hoangthanh.revme.repository.ExerciseRepository;
 import com.hoangthanh.revme.repository.FoodRepository;
+import com.hoangthanh.revme.repository.PlanRepository;
 import com.hoangthanh.revme.repository.UserRepository;
+import com.hoangthanh.revme.repository.WorkoutPlanRepository;
 import com.hoangthanh.revme.request.AssessmentRequest;
 import com.hoangthanh.revme.security.services.UserDetailsImpl;
 import com.hoangthanh.revme.service.AssessmentService;
@@ -47,6 +56,12 @@ public class PlanController {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private WorkoutPlanRepository workoutPlanRepository;
+	
+	@Autowired
+	private PlanRepository planRepository;
 
 	@PostMapping("/generate-and-save")
 	public ResponseEntity<String> generateAndSavePlan(@RequestBody AssessmentRequest assessmentRequest) {

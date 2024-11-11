@@ -29,7 +29,13 @@ public class Plan {
 
     @Column(name = "description")
     private String description;
+    
+    @Column(name = "total_workouts_target")
+    private int totalWorkoutsTarget;
 
+    @Column(name = "total_meals_target")
+    private int totalMealsTarget;
+    
     @Column(name = "calories_burned_per_day")
     private Double caloriesBurnedPerDay;
 
@@ -151,4 +157,21 @@ public class Plan {
 	public void setSpecificDate(LocalDate specificDate) {
 		this.specificDate = specificDate;
 	}
+
+	public int getTotalWorkoutsTarget() {
+		return totalWorkoutsTarget;
+	}
+
+	public void setTotalWorkoutsTarget(int totalWorkoutsTarget) {
+		this.totalWorkoutsTarget = totalWorkoutsTarget;
+	}
+
+	public int getTotalMealsTarget() {
+		return totalMealsTarget;
+	}
+
+	public void setTotalMealsTarget(int totalMealsTarget) {
+		this.totalMealsTarget = totalMealsTarget;
+	}
+	
 }
