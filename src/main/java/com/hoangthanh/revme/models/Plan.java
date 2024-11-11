@@ -31,10 +31,10 @@ public class Plan {
     private String description;
     
     @Column(name = "total_workouts_target")
-    private int totalWorkoutsTarget;
+    private Integer totalWorkoutsTarget;
 
     @Column(name = "total_meals_target")
-    private int totalMealsTarget;
+    private Integer totalMealsTarget;
     
     @Column(name = "calories_burned_per_day")
     private Double caloriesBurnedPerDay;
@@ -158,19 +158,19 @@ public class Plan {
 		this.specificDate = specificDate;
 	}
 
-	public int getTotalWorkoutsTarget() {
+	public Integer getTotalWorkoutsTarget() {
 		return totalWorkoutsTarget;
 	}
 
-	public void setTotalWorkoutsTarget(int totalWorkoutsTarget) {
+	public void setTotalWorkoutsTarget(Integer totalWorkoutsTarget) {
 		this.totalWorkoutsTarget = totalWorkoutsTarget;
 	}
 
-	public int getTotalMealsTarget() {
+	public Integer getTotalMealsTarget() {
 		return totalMealsTarget;
 	}
 
-	public void setTotalMealsTarget(int totalMealsTarget) {
+	public void setTotalMealsTarget(Integer totalMealsTarget) {
 		this.totalMealsTarget = totalMealsTarget;
 	}
 	
