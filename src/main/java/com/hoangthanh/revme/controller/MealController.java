@@ -1,7 +1,6 @@
 package com.hoangthanh.revme.controller;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,45 +11,46 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.hoangthanh.revme.models.MealPlan;
 import com.hoangthanh.revme.models.WorkoutPlan;
-import com.hoangthanh.revme.repository.UserRepository;
+import com.hoangthanh.revme.response.MealResponse;
 import com.hoangthanh.revme.response.WorkoutResponse;
 import com.hoangthanh.revme.security.services.UserDetailsImpl;
+import com.hoangthanh.revme.service.MealService;
 import com.hoangthanh.revme.service.WorkoutService;
 
 @RestController
-@RequestMapping("/api/workouts")
-public class WorkoutController {
+@RequestMapping("/api/meals")
+public class MealController {
 
     @Autowired
-    private WorkoutService workoutService;
+    private MealService mealService;
 
     @GetMapping("/{date}")
-    public ResponseEntity<?> getWorkoutPlansByDate(
+    public ResponseEntity<?> getMealPlansByDate(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Long userId = userDetails.getId();
 
-        WorkoutResponse workoutResponse = workoutService.getWorkoutPlansAndProgressByDate(date, userId);
-        return ResponseEntity.ok(workoutResponse);
+        MealResponse mealResponse = mealService.getMealPlansAndProgressByDate(date, userId);
+        return ResponseEntity.ok(mealResponse);
     }
 
-    @GetMapping("/details/{workoutId}")
-    public ResponseEntity<?> getWorkoutPlanDetails(@PathVariable Long workoutId) {
-        WorkoutPlan workoutPlan = workoutService.getWorkoutPlanDetails(workoutId);
-        return ResponseEntity.ok(workoutPlan);
+    @GetMapping("/details/{mealId}")
+    public ResponseEntity<?> getMealPlanDetails(@PathVariable Long mealId) {
+        MealPlan mealPlan = mealService.getMealPlanDetails(mealId);
+        return ResponseEntity.ok(mealPlan);
     }
 
-    @PostMapping("/complete/{workoutId}")
-    public ResponseEntity<?> completeWorkout(@PathVariable Long workoutId) {
+    @PostMapping("/complete/{mealId}")
+    public ResponseEntity<?> completeMealP(@PathVariable Long mealId) {
         try {
-            WorkoutResponse workoutResponse = workoutService.completeWorkout(workoutId);
-            return ResponseEntity.ok(workoutResponse);
+            MealResponse mealResponse = mealService.completeMeal(mealId);
+            return ResponseEntity.ok(mealResponse);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
