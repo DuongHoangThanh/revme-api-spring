@@ -25,6 +25,7 @@ import com.hoangthanh.revme.models.Food;
 import com.hoangthanh.revme.models.Goal;
 import com.hoangthanh.revme.models.MealPlan;
 import com.hoangthanh.revme.models.Plan;
+import com.hoangthanh.revme.models.Progress;
 import com.hoangthanh.revme.models.User;
 import com.hoangthanh.revme.models.WorkoutPlan;
 import com.hoangthanh.revme.repository.ExerciseRepository;
@@ -32,6 +33,7 @@ import com.hoangthanh.revme.repository.FoodRepository;
 import com.hoangthanh.revme.repository.GoalRepository;
 import com.hoangthanh.revme.repository.MealPlanRepository;
 import com.hoangthanh.revme.repository.PlanRepository;
+import com.hoangthanh.revme.repository.ProgressRepository;
 import com.hoangthanh.revme.repository.WorkoutPlanRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -59,6 +61,9 @@ public class PlanService {
 
 	@Autowired
 	private FoodRepository foodRepository;
+	
+	@Autowired
+	private ProgressRepository progressRepository;
 
 	@Value("${openai.api.key}")
 	private String openaiApiKey;
@@ -298,9 +303,6 @@ public class PlanService {
 	        // Parse the JSON string to a JSONObject
 	        JSONObject jsonObject = new JSONObject(jsonString);
 			
-			
-			
-			
 			return generatedData;
 		} else {
 			throw new RuntimeException("Error occurred while calling ChatGPT API: " + response.getStatusCode());
@@ -311,8 +313,7 @@ public class PlanService {
 
 		if (generatedData.has("content")) {
 			LocalDate currentDate = LocalDate.now();
-			System.out.println("======= Convert data from generate ========");
-//			JSONObject content = generatedData.getJSONObject("content");
+			
 			JSONObject content = null;
 			try {
 				// Lấy dữ liệu từ "content" dưới dạng chuỗi
@@ -324,17 +325,12 @@ public class PlanService {
 				System.out.println(e.getMessage());
 			}
 
-			System.out.println(content);
-
-//			String goalName = content.has("goal_name") ? content.getString("goal_name") : null;
 			String goalName = "";
 			try {
 				 goalName = content.getString("goal_name");
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
-			}
-			
-//			String goalName = generatedData.getString("goal_name");
+			}			
 
 			Goal newGoal = new Goal();
 			newGoal.setGoalName(goalName);
@@ -342,10 +338,7 @@ public class PlanService {
 			goalRepository.save(newGoal);
 
 			JSONArray days = content.getJSONArray("days");
-//			JSONArray days = generatedData.getJSONArray("days");
 			
-			
-
 			for (int i = 0; i < days.length(); i++) {
 				JSONObject day = days.getJSONObject(i);
 
@@ -360,9 +353,13 @@ public class PlanService {
 				
 				LocalDate specificDate = currentDate.plusDays(i); // Ngày hiện tại + i ngày
 			    plan.setSpecificDate(specificDate);
+			   
+			    int totalWorkoutsTarget = 0;
+			    int totalMealsTarget = 0;
 				
 				planRepository.save(plan);
 
+				// add WorkoutPlan
 				JSONArray workouts = day.getJSONArray("workouts");
 				for (int j = 0; j < workouts.length(); j++) {
 					JSONObject workout = workouts.getJSONObject(j);
@@ -387,8 +384,11 @@ public class PlanService {
 					workoutPlan.setStatus(status);
 					workoutPlan.setPlan(plan);
 					workoutPlanRepository.save(workoutPlan);
+					
+					totalWorkoutsTarget++;
 				}
 
+				// add MealPlan
 				JSONArray meals = day.getJSONArray("meals");
 				for (int k = 0; k < meals.length(); k++) {
 					JSONObject meal = meals.getJSONObject(k);
@@ -413,10 +413,27 @@ public class PlanService {
 
 					mealPlan.setPlan(plan);
 					mealPlanRepository.save(mealPlan);
+					
+					totalMealsTarget++;
 				}
+
+				plan.setTotalWorkoutsTarget(totalWorkoutsTarget);
+			    plan.setTotalMealsTarget(totalMealsTarget);
+			    planRepository.save(plan);
+
+			    // Add Progress
+			    Progress progress = new Progress();
+			    progress.setCompletedWorkouts(0);       
+			    progress.setCompletedMeals(0);         
+			    progress.setTotalCaloriesBurned(0.0);   
+			    progress.setTotalCaloriesIntake(0.0);   
+			    progress.setTotalWaterIntake(0.0);      
+			    progress.setPlan(plan);                 
+
+			    progressRepository.save(progress);
 			}
 		} else {
-			System.out.println("loi roi ne");
+			System.out.println("Error!");
 		}
 	}
 }
