@@ -52,7 +52,7 @@ public class Progress {
     @JoinColumn(name = "plan_id")
     private Plan plan;
 
-    @Column(name = "created_at", updatable = false, nullable = false)
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
     @Column(name = "updated_at")

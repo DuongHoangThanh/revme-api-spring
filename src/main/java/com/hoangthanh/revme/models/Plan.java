@@ -45,7 +45,7 @@ public class Plan {
     @Column(name = "water_intake_target")
     private Double waterIntakeTarget;
 
-    @Column(name = "created_at", updatable = false, nullable = false)
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
     @Column(name = "updated_at")
