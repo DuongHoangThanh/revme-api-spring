@@ -28,10 +28,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "assessments")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
-@Getter
 public class Assessment {
 
 	@Id
