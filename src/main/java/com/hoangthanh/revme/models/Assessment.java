@@ -84,7 +84,7 @@ public class Assessment {
 	private StressLevel stressLevel;
 
 	@CreationTimestamp
-	@Column(name = "created_at", updatable = false, nullable = false)
+	@Column(name = "created_at")
 	private Timestamp createdAt;
 
 	@UpdateTimestamp
