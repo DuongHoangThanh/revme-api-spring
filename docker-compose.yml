@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # Dịch vụ Spring Boot
+  springboot-app:
+    build: .
+    ports:
+      - "8080:8080"  # Chạy trên port 8080
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/test_revme1
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=thanh123
+    depends_on:
+      - mysql-db  # Chờ MySQL khởi động xong
+    networks:
+      - app-network
+
+  # Dịch vụ MySQL
+  mysql-db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: thanh123
+      MYSQL_DATABASE: test_revme1  # Tên database
+    ports:
+      - "3307:3306"  # Chạy MySQL trên port 3306
+    networks:
+      - app-network
+
+# Mạng kết nối giữa các container
+networks:
+  app-network:
+    driver: bridge
