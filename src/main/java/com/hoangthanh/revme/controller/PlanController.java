@@ -37,6 +37,8 @@ import com.hoangthanh.revme.security.services.UserDetailsImpl;
 import com.hoangthanh.revme.service.AssessmentService;
 import com.hoangthanh.revme.service.PlanService;
 
+import jakarta.validation.Valid;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/plan")
@@ -64,7 +66,7 @@ public class PlanController {
 	private PlanRepository planRepository;
 
 	@PostMapping("/generate-and-save")
-	public ResponseEntity<String> generateAndSavePlan(@RequestBody AssessmentRequest assessmentRequest) {
+	public ResponseEntity<String> generateAndSavePlan(@Valid @RequestBody AssessmentRequest assessmentRequest) {
 		
 		// Can xem lại phan lay Assessment
 		

@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@EnableJpaRepositories("com.hoangthanh.revme.repository")
 public class RevmeApplication {
 
 	public static void main(String[] args) {

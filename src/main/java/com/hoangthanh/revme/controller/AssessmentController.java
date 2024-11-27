@@ -23,6 +23,8 @@ import com.hoangthanh.revme.response.MessageResponse;
 import com.hoangthanh.revme.security.services.UserDetailsImpl;
 import com.hoangthanh.revme.service.AssessmentService;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/assessments")
@@ -47,7 +49,7 @@ public class AssessmentController {
 	
 	@GetMapping("/{id}")
 	public Assessment getAssessmentById(@PathVariable Long id) {
-		return assessmentService.getAssessmentById(id).get();
+		return assessmentService.getAssessmentById(id).orElseThrow(() -> new EntityNotFoundException("Assessment not found with id: " + id));
 	}
 	
 	@PostMapping
