@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#50B498",
+                        secondary: "#E6FAF4"
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="min-h-screen bg-secondary">
+    <!-- Header -->
+    <header class="bg-white shadow p-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold text-primary">Dashboard</h1>
+        <div class="relative">
+            <img src="https://via.placeholder.com/40" alt="Avatar" class="w-10 h-10 rounded-full cursor-pointer"
+                id="avatarMenuToggle">
+            <div id="dropdownMenu"
+                class="absolute right-0 mt-2 bg-white border border-gray-200 rounded-md shadow-lg hidden">
+                <ul class="py-1">
+                    <li>
+                        <a href="/profile"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                    </li>
+                    <li>
+                        <button id="logoutBtn"
+                            class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navbar -->
+    <nav class="bg-primary text-white py-3 px-4">
+        <ul class="flex space-x-4">
+            <li>
+                <a href="/manage/accounts" class="hover:underline">Quản lý tài khoản</a>
+            </li>
+            <li>
+                <a href="/manage/exercises" class="hover:underline">Quản lý bài tập</a>
+            </li>
+            <li>
+                <a href="/manage/menus" class="hover:underline">Quản lý thực đơn</a>
+            </li>
+            <li>
+                <a href="/manage/plans" class="hover:underline">Quản lý kế hoạch</a>
+            </li>
+            <li>
+                <a href="/manage/progress" class="hover:underline">Quản lý tiến độ người dùng</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Content -->
+    <main class="p-6">
+        <!-- Dashboard Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-6">
+            <div class="bg-white p-4 rounded shadow">
+                <h2 class="text-sm font-semibold text-gray-600">Số lượng tài khoản</h2>
+                <p id="totalAccounts" class="text-xl font-bold text-primary">0</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow">
+                <h2 class="text-sm font-semibold text-gray-600">Số lượng bài tập</h2>
+                <p id="totalExercises" class="text-xl font-bold text-primary">0</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow">
+                <h2 class="text-sm font-semibold text-gray-600">Số lượng thực đơn</h2>
+                <p id="totalMenus" class="text-xl font-bold text-primary">0</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow">
+                <h2 class="text-sm font-semibold text-gray-600">Số lượng kế hoạch</h2>
+                <p id="totalPlans" class="text-xl font-bold text-primary">0</p>
+            </div>
+            <div class="bg-white p-4 rounded shadow">
+                <h2 class="text-sm font-semibold text-gray-600">Số lượng tiến độ</h2>
+                <p id="totalProgress" class="text-xl font-bold text-primary">0</p>
+            </div>
+        </div>
+
+        <!-- Dashboard Charts -->
+        <div class="bg-white p-6 rounded shadow">
+            <h2 class="text-lg font-bold text-primary mb-4">Biểu đồ thống kê</h2>
+            <div id="charts" class="w-full h-96 bg-gray-100 flex items-center justify-center">
+                <p class="text-gray-500">Đang tải biểu đồ...</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Avatar Menu Toggle
+        const avatarMenuToggle = document.getElementById('avatarMenuToggle');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        avatarMenuToggle.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('hidden');
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            alert('Đăng xuất thành công!');
+            window.location.href = '/login';
+        });
+
+        // Fetch data for dashboard stats
+        async function fetchDashboardData() {
+            try {
+                const [accounts, exercises, menus, plans, progress] = await Promise.all([
+                    fetch('/api/accounts/total').then(res => res.json()),
+                    fetch('/api/exercises/total').then(res => res.json()),
+                    fetch('/api/menus/total').then(res => res.json()),
+                    fetch('/api/plans/total').then(res => res.json()),
+                    fetch('/api/progress/total').then(res => res.json())
+                ]);
+
+                document.getElementById('totalAccounts').textContent = accounts.total || 0;
+                document.getElementById('totalExercises').textContent = exercises.total || 0;
+                document.getElementById('totalMenus').textContent = menus.total || 0;
+                document.getElementById('totalPlans').textContent = plans.total || 0;
+                document.getElementById('totalProgress').textContent = progress.total || 0;
+            } catch (error) {
+                console.error('Lỗi khi tải dữ liệu dashboard:', error);
+            }
+        }
+
+        // Fetch data on page load
+        fetchDashboardData();
+    </script>
+</body>
+
+</html>
