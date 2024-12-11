@@ -1,7 +1,9 @@
 package com.hoangthanh.revme.controller;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -143,4 +146,15 @@ public class AuthController {
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
         .body(new MessageResponse("You've been signed out!"));
   }
+  
+  @GetMapping("/accounts/total") 
+  public Map<String, Integer> getTotalAccounts() {
+      // Giả sử đây là logic lấy tổng số tài khoản từ cơ sở dữ liệu
+      int totalAccounts = 150; // Thay bằng số lượng thực tế từ database
+      Map<String, Integer> response = new HashMap<>();
+      response.put("total", totalAccounts);
+      System.out.println(response);
+      return response;
+  }
+  
 }

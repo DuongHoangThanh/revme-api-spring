@@ -436,4 +436,8 @@ public class PlanService {
 			System.out.println("Error!");
 		}
 	}
+	
+	public long getTotalPlan() {
+		return planRepository.count();
+	}
 }
