@@ -2,45 +2,75 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login</title>
+<link rel="icon" type="image/x-icon" href="/images/r2.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<script
+	src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js
+"></script>
+<link
+	href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
+"
+	rel="stylesheet">
 </head>
 
-<body class="flex items-center justify-center min-h-screen bg-gradient-to-r from-[#E6FAF4] via-[#D2F5E8] to-[#C3F0E1]">
-    <div id="login-container" class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md relative">
-        <!-- Loading Spinner -->
-        <div id="loading-spinner" class="hidden absolute inset-0 flex items-center justify-center bg-white bg-opacity-80">
-            <div class="w-16 h-16 border-4 border-t-[#50B498] border-gray-300 rounded-full animate-spin"></div>
-        </div>
+<body
+	class="flex items-center justify-center min-h-screen bg-gradient-to-r from-[#E6FAF4] via-[#D2F5E8] to-[#C3F0E1]">
+	<div id="login-container"
+		class="bg-white shadow-lg rounded-lg p-8 w-full max-w-md relative">
+		<!-- Loading Spinner -->
+		<div id="loading-spinner"
+			class="hidden absolute inset-0 flex items-center justify-center bg-white bg-opacity-80">
+			<div
+				class="w-16 h-16 border-4 border-t-[#50B498] border-gray-300 rounded-full animate-spin"></div>
+		</div>
 
-        <!-- Title -->
-        <h2 class="text-2xl font-bold text-center text-[#50B498] mb-6">Admin Login 😍</h2>
+		<!-- Title -->
+		<h2 class="text-2xl font-bold text-center text-[#50B498] mb-6">Admin
+			Login 😍</h2>
 
-        <!-- Error Message -->
-        <div id="error-message" class="hidden text-red-500 text-sm text-center mb-4"></div>
+		<!-- Error Message -->
+		<div id="error-message"
+			class="hidden text-red-500 text-sm text-center mb-4"></div>
 
-        <!-- Login Form -->
-        <form id="login-form" class="space-y-4">
-            <div>
-                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                <input type="text" id="username" name="username"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#50B498] focus:border-[#50B498] sm:text-sm">
-            </div>
-            <div>
-                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input type="password" id="password" name="password"
-                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#50B498] focus:border-[#50B498] sm:text-sm">
-            </div>
-            <button type="submit"
-                class="w-full bg-[#50B498] hover:bg-[#3e947d] text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-[#50B498] focus:ring-opacity-50">
-                Login
-            </button>
-        </form>
-    </div>
+		<!-- Login Form -->
+		<form id="login-form" class="space-y-4">
+			<div>
+				<label for="username"
+					class="block text-sm font-medium text-gray-700">Username</label> <input
+					type="text" id="username" name="username"
+					class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#50B498] focus:border-[#50B498] sm:text-sm">
+			</div>
+			<div>
+				<label for="password"
+					class="block text-sm font-medium text-gray-700">Password</label> <input
+					type="password" id="password" name="password"
+					class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#50B498] focus:border-[#50B498] sm:text-sm">
+			</div>
+			<button type="submit"
+				class="w-full bg-[#50B498] hover:bg-[#3e947d] text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:ring-[#50B498] focus:ring-opacity-50">
+				Login</button>
+		</form>
+	</div>
 
-    <script>
+	<script>
+	
+		const Toast = Swal.mixin({
+			  toast: true,
+			  position: "top-end",
+			  showConfirmButton: false,
+			  timer: 1000,
+			  timerProgressBar: true,
+			  didOpen: (toast) => {
+			    toast.onmouseenter = Swal.stopTimer;
+			    toast.onmouseleave = Swal.resumeTimer;
+			  }
+			});
+
         const loginForm = document.getElementById('login-form');
         const loadingSpinner = document.getElementById('loading-spinner');
         const errorMessage = document.getElementById('error-message');
@@ -71,7 +101,7 @@
                     const data = await response.json(); 
                     console.log('Login successfully!');
                     
-                    const dashboardResponse = await fetch('http://localhost:8080/api/dashboard', {
+                    const dashboardResponse = await fetch('http://localhost:8080/api/admin/dashboard', {
                     	method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -80,10 +110,13 @@
                     });
 
                     if (dashboardResponse.ok) {
-                    	console.log('get dashboard successfully!');
+                    	Toast.fire({
+                    		  icon: "success",
+                    		  title: "Login successfully!"
+                    		});
                     	setTimeout(() => {
-                    		console.log('Login successfully!');
-                            window.location.href = '/api/dashboard';
+                    		console.log('Login successfully 2!');
+                            window.location.href = '/api/admin/dashboard';
                         }, 1000);
                     } else {
                         throw new Error('Unauthorized to access dashboard!');
@@ -95,11 +128,16 @@
                 // Hiển thị lỗi
                 errorMessage.textContent = error.message;
                 errorMessage.classList.remove('hidden');
+                Toast.fire({
+                	  icon: "error",
+                	  title: "Login failed!"
+                	});
             } finally {
                 // Ẩn loading
                 loadingSpinner.classList.add('hidden');
             }
         });
+                	
     </script>
 </body>
 

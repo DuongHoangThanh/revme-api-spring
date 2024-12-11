@@ -7,5 +7,5 @@ import com.hoangthanh.revme.models.Exercise;
 
 @Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
-	
+
 }
