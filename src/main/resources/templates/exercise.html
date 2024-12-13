@@ -48,8 +48,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
 					class="block py-3 px-4 border border-primary rounded bg-primary text-white hover:bg-primary hover:text-white transition duration-300 text-start">Exercises</a></li>
 				<li><a href="/api/admin/meal"
 					class="block py-3 px-4 border border-primary rounded bg-secondary text-primary hover:bg-primary hover:text-white transition duration-300 text-start">Meals</a></li>
-				<li><a href="/api/admin/plan"
-					class="block py-3 px-4 border border-primary rounded bg-secondary text-primary hover:bg-primary hover:text-white transition duration-300 text-start">Plans</a></li>
+				<!-- <li><a href="/api/admin/plan"
+					class="block py-3 px-4 border border-primary rounded bg-secondary text-primary hover:bg-primary hover:text-white transition duration-300 text-start">Plans</a></li> -->
 			</ul>
 		</nav>
 		<div class="p-4">
@@ -261,7 +261,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
             reps: parseInt(document.getElementById('exerciseReps').value, 10),
             sets: parseInt(document.getElementById('exerciseSets').value, 10),
             durationMinutes: parseInt(document.getElementById('exerciseDuration').value, 10),
-            calories: parseFloat(document.getElementById('exerciseCalories').value),
+            calories: parseFloat(document.getElementById('exerciseCalories').vsalue),
             imageUrl: document.getElementById('exerciseImageUrl').value,
             videoUrl: document.getElementById('exerciseVideoUrl').value
         };
