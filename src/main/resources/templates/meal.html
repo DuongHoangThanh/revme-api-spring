@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meal</title>
+<link rel="icon" type="image/x-icon" href="/images/r2.png">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script
+	src="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js
+"></script>
+<link
+	href="
+https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
+"
+	rel="stylesheet">
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#50B498",
+                        secondary: "#E6FAF4"
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="min-h-screen bg-secondary flex flex-col lg:flex-row">
+	<!-- Sidebar Navbar -->
+	<aside
+		class="w-full lg:w-64 bg-white text-primary flex flex-col h-auto lg:h-screen shadow-lg">
+		<div class="p-4 flex items-center justify-center border-b">
+			<span class="text-6xl font-bold text-primary">RevMe</span>
+		</div>
+		<nav class="flex-1 p-4">
+			<ul class="space-y-4">
+				<li><a href="/api/admin/dashboard"
+					class="block py-3 px-4 border border-primary rounded bg-secondary text-primary hover:bg-primary hover:text-white transition duration-300 text-start">Dashboard</a></li>
+				<li><a href="/api/admin/account"
+					class="block py-3 px-4 border border-primary rounded bg-secondary text-primary transition duration-300 text-start">Accounts</a></li>
+				<li><a href="/api/admin/exercise"
+					class="block py-3 px-4 border border-primary rounded bg-secondary text-primary hover:bg-primary hover:text-white transition duration-300 text-start">Exercises</a></li>
+				<li><a href="/api/admin/meal"
+					class="block py-3 px-4 border border-primary rounded bg-primary text-white hover:bg-primary hover:text-white transition duration-300 text-start">Meals</a></li>
+				<li><a href="/api/admin/plan"
+					class="block py-3 px-4 border border-primary rounded bg-secondary text-primary hover:bg-primary hover:text-white transition duration-300 text-start">Plans</a></li>
+			</ul>
+		</nav>
+		<div class="p-4">
+			<button id="logoutBtn"
+				class="w-full text-left px-4 py-2 bg-primary text-white font-semibold rounded hover:bg-green-700 transition duration-300">Logout</button>
+		</div>
+	</aside>
+
+	<!-- Main Content -->
+	<main class="flex-1 p-6">
+		<!-- Header -->
+		<header
+			class="bg-white shadow p-4 mb-6 flex justify-between items-center">
+			<h1 class="text-xl font-bold text-primary">Meals</h1>
+			<button id="addMealBtn" onclick="openModal()"
+				class="px-4 py-2 bg-primary text-white font-semibold rounded hover:bg-green-700 transition duration-300">Add
+				Meal</button>
+		</header>
+
+		<!-- Accounts Table -->
+		<div class="bg-white p-6 rounded shadow">
+			<table class="w-full border-collapse border border-gray-300">
+				<thead class="bg-secondary">
+					<tr>
+						<th class="border border-gray-300 px-4 py-2">Image</th>
+						<th class="border border-gray-300 px-4 py-2">Name</th>
+						<th class="border border-gray-300 px-4 py-2">Description</th>
+						<th class="border border-gray-300 px-4 py-2">Fat</th>
+						<th class="border border-gray-300 px-4 py-2">Protein</th>
+						<th class="border border-gray-300 px-4 py-2">Carbs</th>
+						<th class="border border-gray-300 px-4 py-2">Calories</th>
+						<th class="border border-gray-300 px-4 py-2">Actions</th>
+					</tr>
+				</thead>
+				<tbody id="mealsTable" class="text-center">
+					<!-- Rows will be populated dynamically -->
+				</tbody>
+			</table>
+		</div>
+	</main>
+
+	<div id="mealModal"
+		class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+		<div class="bg-white p-6 rounded shadow-lg w-[600px]">
+			<h2 id="modalTitle" class="text-lg font-semibold text-primary mb-4">Add/Edit
+				Meal</h2>
+			<form id="mealForm">
+				<input type="hidden" id="mealId">
+				<div class="grid grid-cols-2 gap-4">
+					<div>
+						<label for="mealName"
+							class="block text-sm font-medium text-gray-700">Name</label> <input
+							type="text" id="mealName"
+							class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded"
+							required>
+					</div>
+					<div>
+						<label for="mealDescription"
+							class="block text-sm font-medium text-gray-700">Description</label>
+						<textarea id="mealDescription"
+							class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded"
+							required></textarea>
+					</div>
+					<div>
+						<label for="mealFat"
+							class="block text-sm font-medium text-gray-700">Fat</label> <input
+							type="number" id="mealFat"
+							class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded">
+					</div>
+					<div>
+						<label for="mealProtein"
+							class="block text-sm font-medium text-gray-700">Protein</label> <input
+							type="number" id="mealProtein"
+							class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded">
+					</div>
+					<div>
+						<label for="mealCarbs"
+							class="block text-sm font-medium text-gray-700">Carbs</label> <input
+							type="number" id="mealCarbs"
+							class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded">
+					</div>
+					<div>
+						<label for="mealCalories"
+							class="block text-sm font-medium text-gray-700">Calories</label>
+						<input type="number" step="0.01" id="mealCalories"
+							class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded">
+					</div>
+					<div>
+						<label for="mealImageUrl"
+							class="block text-sm font-medium text-gray-700">Image URL</label>
+						<input type="text" id="mealImageUrl"
+							class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded">
+					</div>
+				</div>
+				<div class="mt-4 flex justify-end">
+					<button type="submit"
+						class="bg-blue-500 text-white py-2 px-4 rounded">Save
+						Meal</button>
+					<button type="button" onclick="closeModal()"
+						class="bg-gray-500 text-white py-2 px-4 rounded ml-2">Cancel</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+	<script>
+	const Toast = Swal.mixin({
+		  toast: true,
+		  position: "top-end",
+		  showConfirmButton: false,
+		  timer: 1000,
+		  timerProgressBar: true,
+		  didOpen: (toast) => {
+		    toast.onmouseenter = Swal.stopTimer;
+		    toast.onmouseleave = Swal.resumeTimer;
+		  }
+		});
+	
+
+
+    const logoutBtn = document.getElementById('logoutBtn');
+    const mealModal = document.getElementById('mealModal');
+    const mealsTable = document.getElementById('mealsTable');
+    let currentMealId = null;
+  
+    logoutBtn.addEventListener('click', () => {
+    	/* if (confirm('Are you sure you want to delete this exercise?')) {
+            fetch(`/api/auth/signout`, {
+                method: 'POST'
+            })
+            .then(() => fetchMeals());
+            window.location.href = '/api/admin/login';
+        } */
+        
+    	Swal.fire({
+    		  title: "Are you sure you are logged out?",
+    		  icon: "warning",
+    		  showCancelButton: true,
+    		  confirmButtonColor: "#50B498",
+    		  cancelButtonColor: "#d33",
+    		  confirmButtonText: "Yes, I'm sure!"
+    		}).then((result) => {
+    		  if (result.isConfirmed) {
+    			  fetch(`/api/auth/signout`, {
+    	                method: 'POST'
+    	            })
+    	            .then(() => fetchMeals());
+    	            window.location.href = '/api/admin/login';
+    		    Swal.fire({
+    		      title: "Success!",
+    		      icon: "success"
+    		    });
+    		  }
+    		});
+        
+    	/* Swal.fire({
+    		  title: "Custom width, padding, color, background.",
+    		  width: 600,
+    		  padding: "3em",
+    		  color: "#716add",
+    		  background: "#fff url(/images/trees.png)",
+    		  backdrop: `
+    			  rgb(80, 180, 152, 0.4)
+    		    url("/images/nyan-cat.gif")
+    		    left top
+    		    no-repeat
+    		  `
+    		}).then((result) => {
+    		  if (result.isConfirmed) {
+    			  fetch(`/api/auth/signout`, {
+    	                method: 'POST'
+    	            })
+    	            .then(() => fetchMeals());
+    	            window.location.href = '/api/admin/login';
+    		    Swal.fire({
+    		      title: "Success!",
+    		      icon: "success"
+    		    });
+    		  }
+    		}); */
+        
+    });
+
+    function openModal() {
+        document.getElementById('mealForm').reset();
+        document.getElementById('modalTitle').innerText = 'Add Meal';
+        currentFoodId = null;
+        mealModal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+        mealModal.classList.add('hidden');
+    }
+
+    document.getElementById('mealForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const food = {
+            name: document.getElementById('mealName').value,
+            description: document.getElementById('mealDescription').value,
+            fat: parseInt(document.getElementById('mealFat').value, 10),
+            protein: parseInt(document.getElementById('mealProtein').value, 10),
+            carbs: parseInt(document.getElementById('mealCarbs').value, 10),
+            calories: parseFloat(document.getElementById('exerciseCalories').value),
+            imageUrl: document.getElementById('exerciseImageUrl').value
+        };
+
+        if (currentFoodId) {
+            try {
+            	// Update exercise
+                fetch(`/api/foods/${currentFoodId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(food)
+                })
+                .then(response => response.json())
+                .then(() => {
+                    fetchMeals();
+                    closeModal();
+                });
+                Swal.fire({
+                	  icon: "success",
+                	  title: "Your work has been saved",
+                	  showConfirmButton: false,
+                	  timer: 1500
+                	});
+            	
+            } catch (error) {
+            	Swal.fire({
+                	  icon: "error",
+                	  title: "Oops...",
+                	  text: "Something went wrong!",
+                	  footer: '<a href="/api/admin/meal">Why do I have this issue?</a>'
+                	});
+            }
+        } else {
+            try {
+            	// Create new exercise
+                fetch('/api/foods', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(food)
+                })
+                .then(response => response.json())
+                .then(() => {
+                	fetchMeals();
+                    closeModal();
+                });
+           
+                Swal.fire({
+              	  icon: "success",
+              	  title: "Your work has been saved",
+              	  showConfirmButton: false,
+              	  timer: 1500
+              	});
+            } catch (error) {
+            	Swal.fire({
+              	  icon: "error",
+              	  title: "Oops...",
+              	  text: "Something went wrong!",
+              	  footer: '<a href="/api/admin/meal">Why do I have this issue?</a>'
+              	});
+            }
+        }
+    });
+
+    function fetchMeals() {
+        fetch('/api/foods')
+            .then(response => response.json())
+            .then(meals => {
+                mealsTable.innerHTML = '';
+                meals.forEach(meal => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="border border-gray-300 px-4 py-2">
+                            <img src="${meal.imageUrl}" alt="Meal Image" class="w-20 h-20 object-cover">
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">${meal.name}</td>
+                        <td class="border border-gray-300 px-4 py-2">${meal.description}</td>
+                        <td class="border border-gray-300 px-4 py-2">${meal.fat}</td>
+                        <td class="border border-gray-300 px-4 py-2">${meal.protein}</td>
+                        <td class="border border-gray-300 px-4 py-2">${meal.carbs} min</td>
+                        <td class="border border-gray-300 px-4 py-2">${meal.calories} kcal</td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <button class="px-4 py-2 bg-primary text-white rounded" onclick="editMeal(${meal.id})">Edit</button>
+                            <button class="px-4 py-2 bg-red-500 text-white rounded" onclick="deleteMeal(${meal.id})">Delete</button>
+                        </td>
+                    `;
+                    mealsTable.appendChild(row);
+                });
+            });
+    }
+
+    function editMeal(foodId) {
+        currentFoodId = foodId;
+        console.log(foodId);
+        fetch(`/api/foods/${foodId}`)
+            .then(response => response.json())
+            .then(meal => {
+                document.getElementById('mealName').value = meal.name;
+                document.getElementById('mealDescription').value = meal.description;
+                document.getElementById('mealFat').value = meal.fat;
+                document.getElementById('mealProtein').value = meal.protein;
+                document.getElementById('mealCarbs').value = meal.carbs;
+                document.getElementById('mealCalories').value = meal.calories;
+                document.getElementById('modalTitle').innerText = 'Edit Meal';
+                mealModal.classList.remove('hidden');
+            });
+    }
+
+    function deleteMeal(foodId) {
+        /* if (confirm('Are you sure you want to delete this exercise?')) {
+            fetch(`/api/exercises/${exerciseId}`, {
+                method: 'DELETE'
+            })
+            .then(() => fetchMeals());
+        } */
+        
+    	Swal.fire({
+    		  title: "Are you sure you want to delete this foods?",
+    		  icon: "warning",
+    		  showCancelButton: true,
+    		  confirmButtonColor: "#50B498",
+    		  cancelButtonColor: "#d33",
+    		  confirmButtonText: "Yes, delete it!"
+    		}).then((result) => {
+    		  if (result.isConfirmed) {
+    			  fetch(`/api/foods/${foodId}`, {
+    	                method: 'DELETE'
+    	            })
+    	            .then(() => fetchMeals());
+    		    Swal.fire({
+    		      title: "Deleted!",
+    		      icon: "success"
+    		    });
+    		  }
+    		});
+    }
+
+    fetchMeals();
+</script>
+
+</body>
+
+</html>

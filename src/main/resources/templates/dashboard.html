@@ -107,9 +107,61 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
         const logoutBtn = document.getElementById('logoutBtn');
 
         logoutBtn.addEventListener('click', () => {
-            alert('Đăng xuất thành công!');
+        	/* if (confirm('Are you sure you want to delete this exercise?')) {
+                fetch(`/api/auth/signout`, {
+                    method: 'POST'
+                })
+                .then(() => fetchExercises());
+                window.location.href = '/api/admin/login';
+            } */
             
-            window.location.href = '/api/admin/login';
+        	Swal.fire({
+        		  title: "Are you sure you are logged out?",
+        		  icon: "warning",
+        		  showCancelButton: true,
+        		  confirmButtonColor: "#50B498",
+        		  cancelButtonColor: "#d33",
+        		  confirmButtonText: "Yes, I'm sure!"
+        		}).then((result) => {
+        		  if (result.isConfirmed) {
+        			  fetch(`/api/auth/signout`, {
+        	                method: 'POST'
+        	            })
+        	            .then(() => fetchExercises());
+        	            window.location.href = '/api/admin/login';
+        		    Swal.fire({
+        		      title: "Success!",
+        		      icon: "success"
+        		    });
+        		  }
+        		});
+            
+        	/* Swal.fire({
+        		  title: "Custom width, padding, color, background.",
+        		  width: 600,
+        		  padding: "3em",
+        		  color: "#716add",
+        		  background: "#fff url(/images/trees.png)",
+        		  backdrop: `
+        			  rgb(80, 180, 152, 0.4)
+        		    url("/images/nyan-cat.gif")
+        		    left top
+        		    no-repeat
+        		  `
+        		}).then((result) => {
+        		  if (result.isConfirmed) {
+        			  fetch(`/api/auth/signout`, {
+        	                method: 'POST'
+        	            })
+        	            .then(() => fetchExercises());
+        	            window.location.href = '/api/admin/login';
+        		    Swal.fire({
+        		      title: "Success!",
+        		      icon: "success"
+        		    });
+        		  }
+        		}); */
+            
         });
 
         async function fetchDashboardData() {

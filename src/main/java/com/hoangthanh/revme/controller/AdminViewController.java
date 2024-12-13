@@ -26,5 +26,17 @@ public class AdminViewController {
 	public String account() {
         return "account";
 	}
-    
+	
+	@GetMapping("/api/admin/exercise")
+	@PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+	public String exercise() {
+       return "exercise";
+	}
+	
+	@GetMapping("/api/admin/meal")
+	@PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
+	public String meal() {
+       return "meal";
+	}
+	
 }
