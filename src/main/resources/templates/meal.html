@@ -48,8 +48,8 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
 					class="block py-3 px-4 border border-primary rounded bg-secondary text-primary hover:bg-primary hover:text-white transition duration-300 text-start">Exercises</a></li>
 				<li><a href="/api/admin/meal"
 					class="block py-3 px-4 border border-primary rounded bg-primary text-white hover:bg-primary hover:text-white transition duration-300 text-start">Meals</a></li>
-				<li><a href="/api/admin/plan"
-					class="block py-3 px-4 border border-primary rounded bg-secondary text-primary hover:bg-primary hover:text-white transition duration-300 text-start">Plans</a></li>
+				<!-- <li><a href="/api/admin/plan"
+					class="block py-3 px-4 border border-primary rounded bg-secondary text-primary hover:bg-primary hover:text-white transition duration-300 text-start">Plans</a></li> -->
 			</ul>
 		</nav>
 		<div class="p-4">
@@ -254,13 +254,13 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
             fat: parseInt(document.getElementById('mealFat').value, 10),
             protein: parseInt(document.getElementById('mealProtein').value, 10),
             carbs: parseInt(document.getElementById('mealCarbs').value, 10),
-            calories: parseFloat(document.getElementById('exerciseCalories').value),
-            imageUrl: document.getElementById('exerciseImageUrl').value
+            calories: parseFloat(document.getElementById('mealCalories').value),
+            imageUrl: document.getElementById('mealImageUrl').value
         };
 
         if (currentFoodId) {
             try {
-            	// Update exercise
+            	// Update meal
                 fetch(`/api/foods/${currentFoodId}`, {
                     method: 'PUT',
                     headers: {
@@ -336,7 +336,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
                         <td class="border border-gray-300 px-4 py-2">${meal.description}</td>
                         <td class="border border-gray-300 px-4 py-2">${meal.fat}</td>
                         <td class="border border-gray-300 px-4 py-2">${meal.protein}</td>
-                        <td class="border border-gray-300 px-4 py-2">${meal.carbs} min</td>
+                        <td class="border border-gray-300 px-4 py-2">${meal.carbs}</td>
                         <td class="border border-gray-300 px-4 py-2">${meal.calories} kcal</td>
                         <td class="border border-gray-300 px-4 py-2">
                             <button class="px-4 py-2 bg-primary text-white rounded" onclick="editMeal(${meal.id})">Edit</button>
@@ -360,6 +360,7 @@ https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css
                 document.getElementById('mealProtein').value = meal.protein;
                 document.getElementById('mealCarbs').value = meal.carbs;
                 document.getElementById('mealCalories').value = meal.calories;
+                document.getElementById('mealImageUrl').value = meal.imageUrl;
                 document.getElementById('modalTitle').innerText = 'Edit Meal';
                 mealModal.classList.remove('hidden');
             });
